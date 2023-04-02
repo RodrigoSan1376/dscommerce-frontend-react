@@ -11,7 +11,7 @@ const product: ProductDTO = {
   description: "Esta TV é muito bonita",
   imgUrl: "https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/2-big.jpg",
   price: 2500.99,
-  catogories: [
+  categories: [
     {
       id: 2,
       name: "Eletrônicos"
@@ -19,6 +19,10 @@ const product: ProductDTO = {
     {
       id: 3,
       name: "Computadores"
+    },
+    {
+      id: 4,
+      name: "Importados"
     }    
   ]
 }
