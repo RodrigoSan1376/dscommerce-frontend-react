@@ -1,6 +1,7 @@
 import "./styles.css";
 import CartIcon from "../CartIcon";
 import iconAdmin from "../../assets/admin.svg";
+import LoggedUser from "../LoggedUser";
 import * as authService from "../../services/auth-service";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
@@ -33,7 +34,7 @@ export default function HeaderClient() {
               </div>
             </Link>
           </div>
-          <Link to="/login">Entrar</Link>
+          <LoggedUser />
         </div>
       </nav>
     </header>
