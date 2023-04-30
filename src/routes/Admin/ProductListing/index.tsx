@@ -2,12 +2,14 @@ import './styles.css';
 import editIcon from '../../../assets/edit.svg';
 import deleteIcon from '../../../assets/delete.svg';
 import * as productService from '../../../services/product-service';
-import { useEffect, useState } from 'react';
-import { ProductDTO } from '../../../models/product';
 import SearchBar from '../../../components/SearchBar';
 import ButtonNextPage from '../../../components/ButtonNextPage';
 import DialogInfo from '../../../components/DialogInfo';
 import DialogConfirmation from '../../../components/DialogConfirmation';
+import ButtonInverse from '../../../components/ButtonInverse';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { ProductDTO } from '../../../models/product';
 
 type QueryParams = {
     page: number;
@@ -15,6 +17,8 @@ type QueryParams = {
 };
 
 export default function ProductListing() {
+
+    const navigate = useNavigate();
 
     const [dialogInfoData, setDialogInfoData] = useState({
         visible: false,
@@ -45,6 +49,10 @@ export default function ProductListing() {
                 setIsLastPage(response.data.last);
             });
     }, [queryParams]);
+
+    function handleNewProductClick() {
+        navigate("/admin/products/create");
+    }
 
     function handleSearch(searchText: string) {
         setProducts([]);
@@ -86,7 +94,7 @@ export default function ProductListing() {
             <section id="product-listing-section" className="dsc-container">
                 <h2 className="dsc-section-title dsc-mb20">Cadastro de produtos</h2>
                 <div className="dsc-btn-page-container dsc-mb20">
-                    <div className="dsc-btn dsc-btn-white">Novo</div>
+                    <div onClick={handleNewProductClick}><ButtonInverse text='Novo'/></div>                    
                 </div>
                 <SearchBar onSearch={handleSearch} />
                 <table className="dsc-table dsc-mb20 dsc-mt20">
