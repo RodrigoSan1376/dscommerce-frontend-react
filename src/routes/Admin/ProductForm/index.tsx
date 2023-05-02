@@ -1,10 +1,13 @@
 import './styles.css';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { CategoryDTO } from '../../../models/category';
 import FormInput from '../../../components/FormInput';
+import FormTextArea from '../../../components/FormTextArea';
+import Select from 'react-select';
 import * as forms from '../../../utils/forms';
 import * as productService from '../../../services/product-service';
-import FormTextArea from '../../../components/FormTextArea';
+import * as categoryService from '../../../services/category-service';
 
 
 export default function ProductForm() {
@@ -13,8 +16,9 @@ export default function ProductForm() {
 
     const isEditing = params.productId !== 'create';
 
-    const [formData, setFormData] = useState<any>({
+    const [categories, setCategories] = useState<CategoryDTO[]>([]);
 
+    const [formData, setFormData] = useState<any>({
         name: {
             value: "",
             id: "name",
@@ -56,6 +60,13 @@ export default function ProductForm() {
             message: "A descrição deve ter pelo menos 10 caracteres"
         }
     });
+
+    useEffect(() => {
+        categoryService.findAllRequest()
+            .then(response => {
+                setCategories(response.data);
+            });
+    }, []);
 
     useEffect(() => {
         if(isEditing) {
@@ -105,6 +116,14 @@ export default function ProductForm() {
                                     className="dsc-form-control"
                                     onTurnDirty={handleTurnDirty}
                                     onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                <Select 
+                                    options={categories} 
+                                    isMulti
+                                    getOptionLabel={(obj) => obj.name}
+                                    getOptionValue={(obj) => String(obj.id)}
                                 />
                             </div>
                             <div>
