@@ -30,7 +30,7 @@ export default function ProductForm() {
             validation: function(value: string) {
                 return /^.{3,80}$/.test(value);
             },
-            message: "Favor informar um nome de 3 a 80 caracteres"
+            message: "Favor informar um nome de 3 a 80 caracteres",
         },
         price: {
             value: "",
@@ -41,7 +41,7 @@ export default function ProductForm() {
             validation: function(value: any) {
                 return Number(value) > 0;
             },
-            message: "Favor informar um valor positivo"
+            message: "Favor informar um valor positivo",
         },
         imgUrl: {
             value: "",
@@ -59,7 +59,7 @@ export default function ProductForm() {
             validation: function(value: string) {
                 return /^.{10,}$/.test(value);
             },
-            message: "A descrição deve ter pelo menos 10 caracteres"
+            message: "A descrição deve ter pelo menos 10 caracteres",
         },
         categories: {
             value: [],
@@ -69,7 +69,7 @@ export default function ProductForm() {
             validation: function(value: CategoryDTO[]) {
                 return value.length > 0;
             },
-            message: "Escolha ao menos uma categoria"
+            message: "Escolha ao menos uma categoria",
         }
     });
 
@@ -97,11 +97,23 @@ export default function ProductForm() {
         setFormData(forms.dirtyAndValidate(formData, name));
     }
 
+    function handleSubmit(event: any) {
+        event.preventDefault();
+
+        const formDataValidated = forms.dirtyAndValidateAll(formData);
+        if(forms.hasAnyInvalid(formDataValidated)) {
+            setFormData(formDataValidated);
+            return;
+        }
+
+        //console.log(forms.toValues(formData));
+    }
+
     return (
         <main>
             <section id="product-form-section" className="dsc-container">
                 <div className="dsc-product-form-container">
-                    <form className="dsc-card dsc-form">
+                    <form className="dsc-card dsc-form" onSubmit={handleSubmit}>
                         <h2>Dados do produto</h2>
                         <div className="dsc-form-controls-container">
                             <div>
