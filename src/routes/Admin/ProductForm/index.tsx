@@ -29,7 +29,7 @@ export default function ProductForm() {
             name: "name",
             type: "text",
             placeholder: "Nome",
-            validation: function(value: string) {
+            validation: function (value: string) {
                 return /^.{3,80}$/.test(value);
             },
             message: "Favor informar um nome de 3 a 80 caracteres",
@@ -40,7 +40,7 @@ export default function ProductForm() {
             name: "price",
             type: "number",
             placeholder: "Preço",
-            validation: function(value: any) {
+            validation: function (value: any) {
                 return Number(value) > 0;
             },
             message: "Favor informar um valor positivo",
@@ -58,7 +58,7 @@ export default function ProductForm() {
             name: "description",
             type: "text",
             placeholder: "Descrição",
-            validation: function(value: string) {
+            validation: function (value: string) {
                 return /^.{10,}$/.test(value);
             },
             message: "A descrição deve ter pelo menos 10 caracteres",
@@ -66,9 +66,9 @@ export default function ProductForm() {
         categories: {
             value: [],
             id: "categories",
-            name: "categories",            
+            name: "categories",
             placeholder: "Categorias",
-            validation: function(value: CategoryDTO[]) {
+            validation: function (value: CategoryDTO[]) {
                 return value.length > 0;
             },
             message: "Escolha ao menos uma categoria",
@@ -83,7 +83,7 @@ export default function ProductForm() {
     }, []);
 
     useEffect(() => {
-        if(isEditing) {
+        if (isEditing) {
             productService.findById(Number(params.productId))
                 .then(response => {
                     setFormData(forms.updateAll(formData, response.data));
@@ -91,7 +91,7 @@ export default function ProductForm() {
         }
     }, []);
 
-    function handleInputChange(event: any) {       
+    function handleInputChange(event: any) {
         setFormData(forms.updateAndValidate(formData, event.target.name, event.target.value));
     }
 
@@ -103,17 +103,21 @@ export default function ProductForm() {
         event.preventDefault();
 
         const formDataValidated = forms.dirtyAndValidateAll(formData);
-        if(forms.hasAnyInvalid(formDataValidated)) {
+        if (forms.hasAnyInvalid(formDataValidated)) {
             setFormData(formDataValidated);
             return;
         }
 
         const requestBody = forms.toValues(formData);
-        if(isEditing) {
+        if (isEditing) {
             requestBody.id = params.productId;
         }
 
-        productService.updateRequest(requestBody)
+        const request = isEditing
+            ? productService.updateRequest(requestBody)
+            : productService.insertRequest(requestBody);
+
+        request
             .then(() => {
                 navigate("/admin/products");
             });
@@ -153,11 +157,11 @@ export default function ProductForm() {
                                 />
                             </div>
                             <div>
-                                <FormSelect 
+                                <FormSelect
                                     {...formData.categories}
                                     className="dsc-form-control dsc-form-select-container"
                                     styles={selectStyles}
-                                    options={categories} 
+                                    options={categories}
                                     onChange={(obj: any) => {
                                         const newFormData = forms.updateAndValidate(formData, "categories", obj);
                                         setFormData(newFormData);
